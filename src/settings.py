@@ -140,4 +140,4 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
 else:
     # Need from src.settings import *
-    import src.local_settings  # noqa
+    from src.local_settings import *  # noqa
