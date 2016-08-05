@@ -14,30 +14,31 @@ class UtilsTestCase(TestCase):
         self.invalid_query = dict(data=[dict(a='foo', b=42)], id=1)
 
     def test__result_valid_item(self):
-        _result(self.valid_item, 1)
-        self.assertDictEqual(_result(self.valid_item, 42), dict(result=3))
+        _result(self.valid_item, 1, [])
+        self.assertDictEqual(
+            _result(self.valid_item, 42, []), dict(result=3))
 
     def test_check_func_valid_query(self):
         query = dict(data=[dict(a=1, b=2)], id=1)
-        result = check_func(query)
+        result = check_func(query, [])
         self.assertListEqual(result, [dict(result=3)])
 
     def test_check_func_invalid_query(self):
-        self.assertListEqual(check_func(self.invalid_query), [None])
+        self.assertListEqual(check_func(self.invalid_query, []), [None])
 
     def test_check_func_pass_valid_with_invalid(self):
         valid_with_invalid_data = dict(data=[
             dict(a='foo', b=42), dict(a=1, b=2)
         ], id=1)
-        result = check_func(valid_with_invalid_data)
+        result = check_func(valid_with_invalid_data, [])
 
         self.assertListEqual(result, [None, dict(result=3)])
 
-    def test_check_func_invalid_query_store_exception(self):
+    def test_handle_queries_invalid_query_store_exception(self):
         query_obj = factories.QueryFactory(data=[self.invalid_item])
+        queries = json.dumps(Query.get_unhandled_queries())
 
-        query = Query.get_unhandled_queries()[0]
-        check_func(query)
+        handle_queries(queries)
         exception = QueryException.objects.first()
 
         self.assertEqual(QueryException.objects.count(), 1)
