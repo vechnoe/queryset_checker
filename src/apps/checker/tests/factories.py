@@ -23,6 +23,22 @@ class FuzzyJson(fuzzy.BaseFuzzyAttribute):
             for _ in range(1, self.count)]
         return data
 
+    def invalid_fuzz(self):
+        invalid_set = [
+            dict(a=[]), dict(), dict(a=1, b='foo'), dict(a=1, b='foo')
+        ]
+        data = [
+            dict(a=random.randrange(100),
+                 b=random.randrange(100))
+            for _ in range(1, self.count)]
+
+        invalid_data = []
+        for _ in range(1, self.count):
+            for d in invalid_set:
+                invalid_data.append(d)
+
+        return data + invalid_data
+
 
 class QueryFactory(DjangoModelFactory):
     status = None
