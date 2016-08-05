@@ -49,7 +49,13 @@
     </div>
   </div>
 {% else %}
-<h2 class="page-header">Queries</h2>
+<h3 class="page-header">
+  <div class="{{ latest_status|yesno:'status-ok,status-false,status-unknown' }}">
+    <strong>Latest Status:</strong>
+    <span class="glyphicon glyphicon-{{ latest_status|yesno:'ok-circle,remove-circle,question-sign' }}"
+          aria-hidden="true"></span>
+    </div>
+</h3>
 {% endif %}
 
 

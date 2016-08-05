@@ -28,7 +28,7 @@ celery_results_node:
 	$(CELERY) -A src worker -E -l INFO -n results_node -Q results
 
 celery_flower:
-	$(CELERY) flower -A  src --address=0.0.0.0 --port=9999 --basic_auth=admin:12345
+	$(CELERY) flower -A  src --address=localhost --port=9999 --basic_auth=admin:12345
 
 django_test:
 	$(PYTHON) $(MANAGE) test src/apps/* --verbosity=1 --logging-level=ERROR
@@ -52,7 +52,7 @@ collect_static:
 	$(PYTHON) $(MANAGE) collectstatic --no-input
 
 run:
-	$(PYTHON) $(MANAGE) runserver 0.0.0.0:8000
+	$(PYTHON) $(MANAGE) runserver localhost:8000
 
 migrations:
 	$(PYTHON) $(MANAGE) makemigrations $(app)

@@ -14,9 +14,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -29,8 +26,6 @@ INSTALLED_APPS = [
 
     'users',
     'checker',
-
-    'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -66,23 +61,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'checker',
-        'USER': 'checker',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-        'PORT': '',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -130,8 +108,6 @@ STATICFILES_DIRS = (
 
 PAGINATION_DEFAULT_PAGINATION = 5
 
-BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-
 CELERY_ACCEPT_CONTENT = ['pickle', 'json']
 
 CELERY_ENABLE_UTC = True
@@ -146,3 +122,22 @@ CELERY_ROUTES = {
 
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'checker',
+            'USER': 'checker',
+            'PASSWORD': '123456',
+            'HOST': '127.0.0.1',
+            'PORT': '',
+        }
+    }
+
+    BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+    INSTALLED_APPS.append('debug_toolbar')
+else:
+    # Need from src.settings import *
+    import src.local_settings  # noqa
