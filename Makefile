@@ -41,6 +41,7 @@ test: django_test pep8
 create_database:
 	$(PYTHON) manage.py migrate auth
 	$(PYTHON) $(MANAGE) migrate --noinput
+	$(PYTHON) $(MANAGE) migrate
 
 loaddata:
 	find src/apps -name '*.json' -exec $(PYTHON) $(MANAGE) loaddata {} \;
