@@ -1,0 +1,11 @@
+__pycache__/
+media/
+static_collected/
+logs/
+.env/
+.idea/
+*.log
+*.pyc
+settings_local.py
+*.pid
+*~

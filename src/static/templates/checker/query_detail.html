@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load pagination_tags %}
+{% load checker_tags %}
+
+{% block title %}
+  Query {{ query.id }}
+{% endblock %}
+
+
+{% block content %}
+<h2 class="page-header">Query {{ query.id }} <small> on {{ query.date }}</small></h2>
+<h3>
+  <div class="{{ query.status|yesno:'status-ok,status-false,status-unknown' }}">
+    <strong>Status:</strong>
+    <span class="glyphicon glyphicon-{{ query.status|yesno:'ok-circle,remove-circle,question-sign' }}"
+          aria-hidden="true">
+    </span>
+  </div>
+</h3>
+<div class="row">
+  <div class="col-md-9">
+    <div class="detail-item">
+      <h4>Data</h4>
+      <pre>
+        <code class="json" id="query_data">
+          {{ query.data|to_json }}
+        </code>
+      </pre>
+    </div>
+    {% if query.result %}
+    <div class="detail-item">
+      <h4>Result</h4>
+      <pre>
+        <code class="json" id="query_result">
+          {{ query.result.result|to_json }}
+        </code>
+      </pre>
+    </div>
+    {% endif %}
+    {% with query.exceptions.all as exceptions %}
+    {% if exceptions.exists %}
+      <h4 class="detail-item">Exceptions</h4>
+      {% autopaginate exceptions %}
+      {% for exception in exceptions %}
+        <div class="detail-item">
+          <h5><strong>{{ exception.id }}</strong> on {{ exception.date }}</h5>
+          <pre>
+            <code class="log">
+              {{ exception.traceback }}
+            </code>
+          </pre>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% paginate %}
+    {% endwith %}
+  </div>
+</div>
+{% endblock %}

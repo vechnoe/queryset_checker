@@ -1,0 +1,56 @@
+{% if site_user.is_authenticated %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-1 text-center status-vert">
+            <div class="{{ latest_status|yesno:'status-ok,status-false,status-unknown' }}">
+              <strong>Status:</strong>
+              <span class="glyphicon glyphicon-{{ latest_status|yesno:'ok-circle,remove-circle,question-sign' }}"
+                    aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <form action="." method="post" id="id_data">
+            {% csrf_token %}
+              <div class="form-group {% if form.errors %}has-error{% endif %}">
+                <div class="input-group center">
+                  <textarea class="form-control custom-control"
+                            name="data"
+                            placeholder="Json"
+                            aria-describedby="helpBlock"
+                            rows="2"
+                            style="resize:none">
+                  </textarea>
+                  <span class="input-group-addon">
+                    <input type="submit"
+                           class="btn btn-lq btn-primary" value="Send Query"/>
+                  </span>
+                </div>
+                {% if form.errors %}
+                  {% for error in form.data.errors %}
+                    <span id="helpBlock" class="help-block">{{ error }}</span>
+                  {% endfor %}
+                {% endif %}
+              </div>
+            </form>
+          </div>
+          <div class="col-md-2 text-center center-vert">
+            <button type="button"
+                    class="btn btn-success"
+                    id="process"
+                    {% if not queries_exists %}
+                    disabled="disabled"
+                    {% endif %}>
+              Process Queries</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+<h2 class="page-header">Queries</h2>
+{% endif %}
+
+
+

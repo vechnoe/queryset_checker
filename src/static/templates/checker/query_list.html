@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load pagination_tags %}
+
+{% block title %}Queries{% endblock %}
+
+{% block content %}
+  {% include "checker/query_menu.html" %}
+  <table class="table table-striped">
+    {% if object_list %}
+      <thead>
+      <th>ID</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th></th>
+      </thead>
+    {% endif %}
+    <tbody>
+    {% autopaginate object_list %}
+    {% for query in object_list %}
+      <tr>
+        <td><strong>{{ query.id }}</strong></td>
+        <td>{{ query.date }}</td>
+        <td>
+          <div class="{{ query.status|yesno:'status-ok,status-false,status-unknown' }}">
+             <span class="glyphicon glyphicon-{{ query.status|yesno:'ok-circle,remove-circle,question-sign' }}"
+                    aria-hidden="true">
+             </span>
+          </div>
+        </td>
+        <td>
+          <a type="button"
+             class="btn btn-info"
+             href="{% url 'checker:query_detail' query.id %}"> View detail</a>
+        </td>
+      </tr>
+    {% empty %}
+      No queries
+    {% endfor %}
+    </tbody>
+  </table>
+  {% paginate %}
+{% endblock %}
